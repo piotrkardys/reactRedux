@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+//import { createStore } from 'redux';
 
 const counter = (state = 0, action) => {			//function to increment/decrement the state
 	switch (action.type) {
@@ -8,7 +8,30 @@ const counter = (state = 0, action) => {			//function to increment/decrement the
 	}
 }
 
-const store = createStore(counter);					//redux's store
+const createStore = (reducer) => {
+	let state;
+	let listeners = [];								
+
+	const getState = () => state;									//returns actual state
+
+	const dispatch = (action) => {									//updates state and calls each listener in the array
+		state = reducer(state, action);
+		listeners.forEach(listener => listener());
+	};
+
+	const subscribe = (listener) => {								//adds listeners to the array and filters them
+		listeners.push(listener);
+		return () => {
+			listeners = listeners.filter(l => l !== listener);
+		};
+	};
+
+	dispatch({});													//returns function to the primary state
+
+	return { getState, dispatch, subscribe };
+};
+
+const store = createStore(counter);					//(redux's store)ours store
 //const render = () => {
 //	document.body.innerText = store.getState();
 //};
