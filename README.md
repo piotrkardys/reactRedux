@@ -8,3 +8,4 @@
 "19.04.2016 - 14:25 – Lesson 11: testing the Reducer (if it's pure function), update file main.js" 
 "19.04.2016 - 14:55 – Lesson 12: adding the toggle action (if task is completed or not), update file main.js" 
 "19.04.2016 - 15:30 – Lesson 13: dividing todos list (creating Reducers tree), update file main.js" 
+"19.04.2016 - 16:30 – Lesson 14: adding store and visibilityFilter Reducer, update file main.js" 
