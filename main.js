@@ -217,8 +217,9 @@ testToggleTodo();
 console.log('All tests passed!');
 */
 
-/* LESSON 14 */
-import { createStore, combineReducers } from 'redux';
+/* LESSON 14 - 16 */
+import { createStore } from 'redux';
+//import { combineReducers } from 'redux';
 
 const todo = (state, action) => {								
 	switch (action.type) {
@@ -246,6 +247,18 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
 	switch(action.type) {
 		case 'SET_VISIBILITY_FILTER': return action.filter;
 		default: return state;
+	};
+};
+
+const combineReducers = (reducers) => {					//combineReducers from scratch
+	return (state = {}, action) => {					//returns other function - proper reducer
+		return Object.keys(reducers).reduce(			//returns the object which
+				(nextState, key) => {					//consists the nextState of each 'todoApp' field
+					nextState[key] = reducers[key](state[key], action); //calculations of the nextState
+					return nextState;					//returns the nextState (part of the forEach loop)
+				},
+				{}
+			);
 	};
 };
 

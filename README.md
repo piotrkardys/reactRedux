@@ -10,3 +10,4 @@
 "19.04.2016 - 15:30 – Lesson 13: dividing todos list (creating Reducers tree), update file main.js" 
 "19.04.2016 - 16:30 – Lesson 14: adding store and visibilityFilter Reducer, update file main.js" 
 "19.04.2016 - 17:00 – Lesson 15: using the combineReducers to create 'todoApp', update file main.js" 
+"19.04.2016 - 17:50 – Lesson 16: creating the combineReducers from scratch, update file main.js" 
