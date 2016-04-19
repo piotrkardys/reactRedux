@@ -156,20 +156,23 @@ testToggleToDo();
 console.log('All tests passed!');
 */
 
-/* LESSON 11 */
-const todos = (state = [], action) => {								// R E D U C E R ! (updates application's state)
+/* LESSON 11 - 13*/
+const todo = (state, action) => {								//R E D U C E R ! (of single object in the todos array)
+	switch (action.type) {
+		case 'ADD_TODO': return { id: action.id, text: action.text, completed: false };
+		case 'TOGGLE_TODO': 
+			if (state.id !== action.id) return state;		//if state id isn't equal to action id do nothing with element
+			return Object.assign({}, state, { completed: !state.completed }); //otherwise update field 'completed'
+		default: return state;
+	};
+};
+
+const todos = (state = [], action) => {							// R E D U C E R ! (of the array of todos - updates application's state)
 	switch (action.type) {
 		case 'ADD_TODO':
-			return [...state, {										//we are adding new object to the array (list) (equivalent to .concat method)
-						id: action.id,
-						text: action.text,
-						completed: false
-				    }];
+			return [...state, todo(undefined, action)];			//we are adding new object to the array (list) (equivalent to .concat method)
 		case 'TOGGLE_TODO':
-			return state.map(todo => {								//mappig - forEach 'todo' do something
-						if (todo.id !== action.id) return todo;		//if todo.id isn't equal to action id do nothing with element
-						return Object.assign({}, todo, { completed: !todo.completed });	//otherwise update field 'completed'
-			});
+			return state.map(t => todo(t, action));				//mappig - forEach 't' do something
 		default:
 			return state;
 	}
