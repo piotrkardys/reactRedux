@@ -124,7 +124,7 @@ testIncrementCounter();
 console.log('All tests passed.');
 */
 
-/* LESSON 10 */ 
+/* LESSON 10 */ /*
 const toggleToDo = (todo) => {										//change the 'completed' field
 	//return {														//both ways are correct
 	//	id: todo.id,
@@ -153,4 +153,43 @@ const testToggleToDo = () => {
 };
 
 testToggleToDo();
-console.log('All test passed!');
+console.log('All tests passed!');
+*/
+
+/* LESSON 11 */
+const todos = (state = [], action) => {								// R E D U C E R ! (updates application's state)
+	switch (action.type) {
+		case 'ADD_TODO':
+			return [...state, {										//we are adding new object to the array (list) (equivalent to .concat method)
+						id: action.id,
+						text: action.text,
+						completed: false
+				    }];
+		default:
+			return state;
+	}
+};
+
+const testAddTodo = () => {
+	const stateBefore = [];
+	const action = {
+		type: 'ADD_TODO',
+		id: 0,
+		text: 'React Redux'
+	};
+	const stateAfter = [
+		{
+			id: 0,
+			text: 'React Redux',
+			completed: false
+		}
+	];
+
+	deepFreeze(stateBefore);
+	deepFreeze(action);
+
+	expect(todos(stateBefore, action)).toEqual(stateAfter);
+};
+
+testAddTodo();
+console.log('All tests passed!');
