@@ -72,7 +72,7 @@ render();
 */
 
 
-/* LESSON 9 */ 
+/* LESSON 9 */ /*
 const addCounter = (list) => {							//adds counter
 	//return list.concat([0]);							//both ways are good
   	return [...list, 0];
@@ -88,7 +88,7 @@ const removeCounter = (list, index) => {				//removes counter
 const incrementCounter = (list, index) => {				//increments specific number in list
 	//return list.slice(0, index).concat([list[index] + 1]).concat(list.slice(index+1));
   	return [...list.slice(0, index),
-        	   list[index] + 1,
+           	   list[index] + 1,
     	  	...list.slice(index + 1)
   ];
 };
@@ -122,3 +122,35 @@ testRemoveCounter();
 testIncrementCounter();
 
 console.log('All tests passed.');
+*/
+
+/* LESSON 10 */ 
+const toggleToDo = (todo) => {										//change the 'completed' field
+	//return {														//both ways are correct
+	//	id: todo.id,
+	//	text: todo.text,
+	//	completed: !todo.completed
+	//};
+	return Object.assign({}, todo, { completed: !todo.completed });//assign - adds fields to the new object by copying (thats why as a first argument we passed empty object - we create new object),
+																   //second argument is the object which we want to copy, and the third is which field should be added/modified
+};
+
+const testToggleToDo = () => {
+	const todoBefore = {
+		id: 0,
+		text: 'React Redux',
+		completed: false
+	};
+	const todoAfter = {
+		id: 0,
+		text: 'React Redux',
+		completed: true
+	};
+
+	deepFreeze(todoBefore);
+
+	expect(toggleToDo(todoBefore)).toEqual(todoAfter);
+};
+
+testToggleToDo();
+console.log('All test passed!');
