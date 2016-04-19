@@ -165,6 +165,11 @@ const todos = (state = [], action) => {								// R E D U C E R ! (updates appli
 						text: action.text,
 						completed: false
 				    }];
+		case 'TOGGLE_TODO':
+			return state.map(todo => {								//mappig - forEach 'todo' do something
+						if (todo.id !== action.id) return todo;		//if todo.id isn't equal to action id do nothing with element
+						return Object.assign({}, todo, { completed: !todo.completed });	//otherwise update field 'completed'
+			});
 		default:
 			return state;
 	}
@@ -173,16 +178,29 @@ const todos = (state = [], action) => {								// R E D U C E R ! (updates appli
 const testAddTodo = () => {
 	const stateBefore = [];
 	const action = {
-		type: 'ADD_TODO',
-		id: 0,
-		text: 'React Redux'
+		type: 'ADD_TODO', id: 0, text: 'React Redux'
 	};
 	const stateAfter = [
-		{
-			id: 0,
-			text: 'React Redux',
-			completed: false
-		}
+		{ id: 0, text: 'React Redux', completed: false}
+	];
+
+	deepFreeze(stateBefore);
+	deepFreeze(action);
+
+	expect(todos(stateBefore, action)).toEqual(stateAfter);
+};
+
+const testToggleTodo = () => {
+	const stateBefore = [
+		{ id: 0, text: 'React Redux', completed: false },
+		{ id: 1, text: 'Go shopping', completed: false }
+	];
+	const action = {
+		type: 'TOGGLE_TODO', id: 1
+	};
+	const stateAfter = [
+		{ id: 0, text: 'React Redux', completed: false },
+		{ id: 1, text: 'Go shopping', completed: true }
 	];
 
 	deepFreeze(stateBefore);
@@ -192,4 +210,5 @@ const testAddTodo = () => {
 };
 
 testAddTodo();
+testToggleTodo();
 console.log('All tests passed!');
