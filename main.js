@@ -218,7 +218,7 @@ console.log('All tests passed!');
 */
 
 /* LESSON 14 */
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 
 const todo = (state, action) => {								
 	switch (action.type) {
@@ -249,12 +249,14 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
 	};
 };
 
-const todoApp = (state = {}, action) => {									//root of the REDUCER's tree
-	return {
-		todos: todos(state.todos, action),									//calls todos REDUCER
-		visibilityFilter: visibilityFilter(state.visibilityFilter, action)	//calls visibilityFilter REDUCER
-	};
-};
+const todoApp = combineReducers({todos, visibilityFilter});					//does exactly the same as under 
+
+//const todoApp = (state = {}, action) => {									//root of the REDUCER's tree
+//	return {
+//		todos: todos(state.todos, action),									//calls todos REDUCER
+//		visibilityFilter: visibilityFilter(state.visibilityFilter, action)	//calls visibilityFilter REDUCER
+//	};
+//};
 
 const store = createStore(todoApp);
 
@@ -284,7 +286,7 @@ console.log('X X X X X X X X X');
 
 console.log('DISPATCHING TOGGLE_TODO..');
 store.dispatch({ type: 'TOGGLE_TODO', id: 0 });
-console.log('= = = = = = = = = = = =');
+console.log('= = = = = = = = = = =a =');
 
 console.log('CURRENT STATE:');
 console.log(store.getState());
