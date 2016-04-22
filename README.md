@@ -13,3 +13,4 @@
 "19.04.2016 - 17:50 – Lesson 16: creating the combineReducers from scratch, update file main.js" 
 "22.04.2016 – 09:10 – Lesson 17: showing the content (todos list) on the page with the button to add new task, update file main.js" 
 "22.04.2016 – 09:40 – Lesson 18: adding the opportunity to togle todo as completed , update file main.js" 
+"22.04.2016 – 10:40 – Lesson 19: filtering the list added (All, Active, Completed) , update file main.js" 

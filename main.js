@@ -353,12 +353,42 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
 const todoApp = combineReducers({todos, visibilityFilter});
 const store = createStore(todoApp);
 
+const FilterLink = ({filter, children, currentFilter}) => {		//children property is sign of which element calls that function (what's between the HTML marks of that element)
+	if (filter === currentFilter) {								//if the "new filter" is the current one - dont show it as a link
+		return <span>{children}</span>							//and do nothing 
+	}
+
+	return (													//otherwise create new list of todos (with chosen filter)
+		<a href="#" onClick={e => {
+			e.preventDefault();
+			store.dispatch({ type: 'SET_VISIBILITY_FILTER', filter });
+		}}>
+			{children}
+		</a>
+	);
+};
+
+const getVisibleTodos = (todos, filter) => {			//returns the list (array) of the 'todos' which are selected (it depends on the filter)
+	switch(filter) {
+		case 'SHOW_ALL': return todos;
+
+		case 'SHOW_ACTIVE': return todos.filter(t => !t.completed);
+
+		case 'SHOW_COMPLETED': return todos.filter(t => t.completed);
+	}
+};
+
 let nextTodoId = 0;											//index of the element in the todos list
 class TodoApp extends React.Component {						
 	render() {		//renders input field, button and the list of tasks (todos list; input ref has to be set that way); in the <li> we need to set the key value
+		const {todos, visibilityFilter} = this.props;
+
+		const visibleTodos = getVisibleTodos(todos, visibilityFilter);		//gets array of current visible 'todos' (depends on chosen filter)
+
 		return (
 			<div>
 				<input ref={node=> { this.input = node}} />
+
 				<button onClick={() => {
 					store.dispatch({ type: 'ADD_TODO', text: this.input.value, id: nextTodoId++ });
 					this.input.value = '';
@@ -367,7 +397,7 @@ class TodoApp extends React.Component {
 				</button>
 
 				<ul>
-					{this.props.todos.map(todo => 
+					{visibleTodos.map(todo => 
 						<li key={todo.id} onClick={() => {
 							store.dispatch({ type: 'TOGGLE_TODO', id: todo.id });
 						}}
@@ -376,13 +406,21 @@ class TodoApp extends React.Component {
 						</li>
 					)}
 				</ul>
+
+				Show: 
+				{' '}
+				<FilterLink filter='SHOW_ALL' currentFilter={visibilityFilter}>ALL, </FilterLink>
+				{' '}
+				<FilterLink filter='SHOW_ACTIVE' currentFilter={visibilityFilter}>ACTIVE, </FilterLink>
+				{' '}
+				<FilterLink filter='SHOW_COMPLETED' currentFilter={visibilityFilter}>COMPLETED</FilterLink>
 			</div>
 		)
 	}
 };
 
 const render = () => {						//renders components on the page
-	ReactDOM.render(<TodoApp todos={store.getState().todos}/>, document.getElementById('root'));
+	ReactDOM.render(<TodoApp {...store.getState()}/>, document.getElementById('root'));	//giver all store agruments as a props
 };
 
 store.subscribe(render);					//shows the components (calls the render function)
