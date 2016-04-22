@@ -16,3 +16,4 @@
 "22.04.2016 – 10:40 – Lesson 19: filtering the list added (All, Active, Completed) , update file main.js" 
 "22.04.2016 – 11:40 – Lesson 20: dividing application into smaller components (Todo &TodoList) , update file main.js" 
 "22.04.2016 – 12:40 – Lesson 21: dividing application into smaller components (Footer &AddTodo) , update file main.js" 
+"22.04.2016 – 13:50 – Lesson 22: dividing 'Footer' into smaller components (FilterLink &Link), getting rid of additional parameters, update file main.js" 

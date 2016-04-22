@@ -316,7 +316,7 @@ console.log(store.getState());
 console.log('= = = = = = = =');
 */
 
-/* LESSON 17 */
+/* LESSON 17 - 22 */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
@@ -353,15 +353,16 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
 const todoApp = combineReducers({todos, visibilityFilter});
 const store = createStore(todoApp);
 
-const FilterLink = ({filter, children, currentFilter, onClick}) => {		//children property is sign of which element calls that function (what's between the HTML marks of that element)
-	if (filter === currentFilter) {								//if the "new filter" is the current one - dont show it as a link
+//update lesson22 - now the Link function is responsible only for view of the links, not for their behaviour
+const Link = ({active, children, onClick}) => {					//children property is sign of which element calls that function (what's between the HTML marks of that element)
+	if (active) {												//if the "new filter" is the current one - dont show it as a link
 		return <span>{children}</span>							//and do nothing 
 	}
 	//
 	return (													//otherwise create new list of todos (with chosen filter)
 		<a href="#" onClick={e => {
 			e.preventDefault();
-			onClick(filter);
+			onClick();
 		}}>
 			{children}
 		</a>
@@ -369,16 +370,38 @@ const FilterLink = ({filter, children, currentFilter, onClick}) => {		//children
 	
 };
 //
-const Footer = ({visibilityFilter, onFilterClick}) => {			//visualization of the filters (Show: All, Active, Completed)
+
+class FilterLink extends React.Component {					//class which is a container - specify how to look and how to behaviour 
+	componentDidMount() {									//forces the rerendering when the store changes (provides good setting of the props &state fields)
+		this.unsubscribe = store.subscribe(() => this.forceUpdate());
+	}
+	componentWillUnmount() {
+		this.unsubscribe();
+	}
+
+	render() {
+		const props = this.props;
+		const state = store.getState();
+
+		return (
+			<Link active={props.filter === state.visibilityFilter} onClick={() => 
+				store.dispatch({ type: 'SET_VISIBILITY_FILTER', filter: props.filter})}>
+				{props.children}
+			</Link>
+		);
+	}
+};
+//
+const Footer = () => {							//visualization of the filters (Show: All, Active, Completed)
 	return (
 		<div>
 			<p>Show: 
 				{' '}
-				<FilterLink filter='SHOW_ALL' currentFilter={visibilityFilter} onClick={onFilterClick}>ALL, </FilterLink>
+				<FilterLink filter='SHOW_ALL'>ALL, </FilterLink>
 				{' '}
-				<FilterLink filter='SHOW_ACTIVE' currentFilter={visibilityFilter} onClick={onFilterClick}>ACTIVE, </FilterLink>
+				<FilterLink filter='SHOW_ACTIVE'>ACTIVE, </FilterLink>
 				{' '}
-				<FilterLink filter='SHOW_COMPLETED' currentFilter={visibilityFilter} onClick={onFilterClick}>COMPLETED</FilterLink>
+				<FilterLink filter='SHOW_COMPLETED'>COMPLETED</FilterLink>
 			</p>
 		</div>
 	);
@@ -445,9 +468,7 @@ const TodoApp = ({todos, visibilityFilter}) => (
 					store.dispatch({ type: 'TOGGLE_TODO', id });
 				}} />
 
-				<Footer visibilityFilter={visibilityFilter} onFilterClick={filter => {
-					store.dispatch({ type: 'SET_VISIBILITY_FILTER', filter });
-				}} />
+				<Footer />
 
 			</div>
 //	}
