@@ -15,3 +15,4 @@
 "22.04.2016 – 09:40 – Lesson 18: adding the opportunity to toggle todo as completed , update file main.js" 
 "22.04.2016 – 10:40 – Lesson 19: filtering the list added (All, Active, Completed) , update file main.js" 
 "22.04.2016 – 11:40 – Lesson 20: dividing application into smaller components (Todo &TodoList) , update file main.js" 
+"22.04.2016 – 12:40 – Lesson 21: dividing application into smaller components (Footer &AddTodo) , update file main.js" 
