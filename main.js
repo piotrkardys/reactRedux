@@ -561,7 +561,7 @@ const Link = ({active, children, onClick}) => {
 
 class FilterLink extends React.Component {
 	componentDidMount() {
-		const {store} = this.props;
+		const {store} = this.context;
 		this.unsubscribe = store.subscribe(() => this.forceUpdate());
 	}
 	componentWillUnmount() {
@@ -570,7 +570,7 @@ class FilterLink extends React.Component {
 
 	render() {
 		const props = this.props;
-		const {store} = props;
+		const {store} = this.context;
 		const state = store.getState();
 
 		return (
@@ -582,17 +582,20 @@ class FilterLink extends React.Component {
 	}
 };
 //
+FilterLink.contextTypes = {
+	store: React.PropTypes.object
+};
 
-const Footer = ({store}) => {
+const Footer = () => {
 	return (
 		<div>
 			<p>Show: 
 				{' '}
-				<FilterLink filter='SHOW_ALL' store={store}>ALL, </FilterLink>
+				<FilterLink filter='SHOW_ALL'>ALL, </FilterLink>
 				{' '}
-				<FilterLink filter='SHOW_ACTIVE' store={store}>ACTIVE, </FilterLink>
+				<FilterLink filter='SHOW_ACTIVE'>ACTIVE, </FilterLink>
 				{' '}
-				<FilterLink filter='SHOW_COMPLETED' store={store}>COMPLETED</FilterLink>
+				<FilterLink filter='SHOW_COMPLETED'>COMPLETED</FilterLink>
 			</p>
 		</div>
 	);
@@ -619,7 +622,7 @@ const TodoList = ({todos, onTodoClick}) => {
 
 
 let nextTodoId = 0;
-const AddTodo = ({store}) => {
+const AddTodo = (props, context) => {
 	let input;
 
 	return (
@@ -627,7 +630,7 @@ const AddTodo = ({store}) => {
 			<input ref={node => { input = node}} />
 
 			<button onClick={() => {
-				store.dispatch({ type: 'ADD_TODO', text: input.value, id: nextTodoId++ });
+				context.store.dispatch({ type: 'ADD_TODO', text: input.value, id: nextTodoId++ });
 				input.value = '';
 			}}>
 				Add Todo
@@ -636,6 +639,9 @@ const AddTodo = ({store}) => {
 	);
 };
 //
+AddTodo.contextTypes = {
+	store: React.PropTypes.object
+};
 
 
 const getVisibleTodos = (todos, filter) => {
@@ -651,7 +657,7 @@ const getVisibleTodos = (todos, filter) => {
 
 class VisibleTodoList extends React.Component {
 	componentDidMount() {
-		const {store} = this.props;
+		const {store} = this.context;
 		this.unsubscribe = store.subscribe(() => this.forceUpdate());
 	}
 	componentWillUnmount() {
@@ -660,7 +666,7 @@ class VisibleTodoList extends React.Component {
 
 	render() {
 		const props = this.props;
-		const {store} = props;
+		const {store} = this.context;
 		const state = store.getState();
 
 		return (
@@ -671,16 +677,38 @@ class VisibleTodoList extends React.Component {
 	}
 };
 //
+VisibleTodoList.contextTypes = {		//if we don't specify that, the component won't receive the CONTEXT
+	store: React.PropTypes.object
+};
 
 
-const TodoApp = ({store}) => (
+const TodoApp = () => (
 
 	<div>
-		<AddTodo store={store} />
-		<VisibleTodoList store={store} />
-		<Footer store={store} />
+		<AddTodo />
+		<VisibleTodoList />
+		<Footer />
 	</div>
 );
+//
+
+class Provider extends React.Component {					//CONTEXT - advanced react feature which renders component inside
+	getChildContext() {
+		return {
+			store: this.props.store
+		};
+	}
+
+	render() {
+		return this.props.children;
+	}
+};
+Provider.childContextTypes = {			//it is important to specify PropTypes - otherwise children don't get that prop
+	store: React.PropTypes.object
+};
 
 
-ReactDOM.render(<TodoApp store={createStore(todoApp)} />, document.getElementById('root'));
+ReactDOM.render(<Provider store={createStore(todoApp)}>
+					<TodoApp />
+				</Provider>, 
+				document.getElementById('root'));

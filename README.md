@@ -19,3 +19,4 @@
 "22.04.2016 – 13:50 – Lesson 22: dividing 'Footer' into smaller components (FilterLink &Link), getting rid of additional parameters, update file main.js" 
 "25.04.2016 – 15:00 – Lesson 23: dividing TodoApp into smaller components – creating VisibleTodoList, update file main.js" 
 "25.04.2016 – 15:50 – Lesson 24: changing the global variable store into parameter of the components, update file main.js" 
+"25.04.2016 – 17:00 – Lesson 25: creating class Provider which provides 'context' to the child components, update file main.js" 
