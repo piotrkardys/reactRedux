@@ -499,11 +499,11 @@ const TodoApp = () => (
 //render();
 */
 
-/* LESSON 24 - */
+/* LESSON 24 - 27 */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
-
+import { Provider, connect } from 'react-redux';
 
 
 const todo = (state, action) => {								
@@ -654,32 +654,45 @@ const getVisibleTodos = (todos, filter) => {
 	}
 };
 
-
-class VisibleTodoList extends React.Component {
-	componentDidMount() {
-		const {store} = this.context;
-		this.unsubscribe = store.subscribe(() => this.forceUpdate());
-	}
-	componentWillUnmount() {
-		this.unsubscribe();
-	}
-
-	render() {
-		const props = this.props;
-		const {store} = this.context;
-		const state = store.getState();
-
-		return (
-			<TodoList todos={getVisibleTodos(state.todos, state.visibilityFilter)} onTodoClick={id => {
-				store.dispatch({ type: 'TOGGLE_TODO', id });
-			}} />
-		)
-	}
+const mapStateToProps = (state) => {					//update every time after while dispatch method is called
+	return {
+		todos: getVisibleTodos(state.todos, state.visibilityFilter)	
+	};
 };
+
+const mapDispatchToProps = (dispatch) => {				//update in response of the action
+	return {
+		onTodoClick: (id) => { dispatch({ type: 'TOGGLE_TODO', id }) }
+	};
+};
+
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList); //connect method provides proper updates
+
+//class VisibleTodoList extends React.Component {
+//	componentDidMount() {
+//		const {store} = this.context;
+//		this.unsubscribe = store.subscribe(() => this.forceUpdate());
+//	}
+//	componentWillUnmount() {
+//		this.unsubscribe();
+//	}
 //
-VisibleTodoList.contextTypes = {		//if we don't specify that, the component won't receive the CONTEXT
-	store: React.PropTypes.object
-};
+//	render() {
+//		const props = this.props;
+//		const {store} = this.context;
+//		const state = store.getState();
+//
+//		return (
+//			<TodoList todos={getVisibleTodos(state.todos, state.visibilityFilter)} onTodoClick={id => {
+//				store.dispatch({ type: 'TOGGLE_TODO', id });
+//			}} />
+//		)
+//	}
+//};
+//
+//VisibleTodoList.contextTypes = {		//if we don't specify that, the component won't receive the CONTEXT
+//	store: React.PropTypes.object
+//};
 
 
 const TodoApp = () => (
@@ -692,20 +705,20 @@ const TodoApp = () => (
 );
 //
 
-class Provider extends React.Component {					//CONTEXT - advanced react feature which renders component inside
-	getChildContext() {
-		return {
-			store: this.props.store
-		};
-	}
-
-	render() {
-		return this.props.children;
-	}
-};
-Provider.childContextTypes = {			//it is important to specify PropTypes - otherwise children don't get that prop
-	store: React.PropTypes.object
-};
+//class Provider extends React.Component {					//CONTEXT - advanced react feature which renders component inside
+//	getChildContext() {
+//		return {
+//			store: this.props.store
+//		};
+//	}
+//
+//	render() {
+//		return this.props.children;
+//	}
+//};
+//Provider.childContextTypes = {			//it is important to specify PropTypes - otherwise children don't get that prop
+//	store: React.PropTypes.object
+//};
 
 
 ReactDOM.render(<Provider store={createStore(todoApp)}>

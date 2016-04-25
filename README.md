@@ -20,3 +20,4 @@
 "25.04.2016 – 15:00 – Lesson 23: dividing TodoApp into smaller components – creating VisibleTodoList, update file main.js" 
 "25.04.2016 – 15:50 – Lesson 24: changing the global variable store into parameter of the components, update file main.js" 
 "25.04.2016 – 17:00 – Lesson 25: creating class Provider which provides 'context' to the child components, update file main.js" 
+"25.04.2016 – 18:25 – Lesson 27: dividing VisibleTodoList into 3 functions linked with the connect function, update file main.js" 
