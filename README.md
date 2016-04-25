@@ -17,3 +17,4 @@
 "22.04.2016 – 11:40 – Lesson 20: dividing application into smaller components (Todo &TodoList) , update file main.js" 
 "22.04.2016 – 12:40 – Lesson 21: dividing application into smaller components (Footer &AddTodo) , update file main.js" 
 "22.04.2016 – 13:50 – Lesson 22: dividing 'Footer' into smaller components (FilterLink &Link), getting rid of additional parameters, update file main.js" 
+"25.04.2016 – 15:00 – Lesson 23: dividing TodoApp into smaller components – creating VisibleTodoList, update file main.js" 

@@ -423,7 +423,7 @@ const TodoList = ({todos, onTodoClick}) => {					//visualization of 'todos' list
 	);
 };
 
-const AddTodo =({onAddClick}) => {								//visualization of the AddTodo panel (input + button)
+const AddTodo =() => {							  			//visualization of the AddTodo panel (input + button)
 	let input;
 
 	return (
@@ -431,7 +431,7 @@ const AddTodo =({onAddClick}) => {								//visualization of the AddTodo panel (
 			<input ref={node => { input = node}} />
 
 			<button onClick={() => {
-				onAddClick(input.value);
+				store.dispatch({ type: 'ADD_TODO', text: input.value, id: nextTodoId++ });
 				input.value = '';
 			}}>
 				Add Todo
@@ -451,32 +451,49 @@ const getVisibleTodos = (todos, filter) => {			//returns the list (array) of the
 	}
 };
 
+class VisibleTodoList extends React.Component {
+	componentDidMount() {
+		this.unsubscribe = store.subscribe(() => this.forceUpdate());
+	}
+	componentWillUnmount() {
+		this.unsubscribe();
+	}
+
+	render() {
+		const props = this.props;
+		const state = store.getState();
+
+		return (
+			<TodoList todos={getVisibleTodos(state.todos, state.visibilityFilter)} onTodoClick={id => {
+				store.dispatch({ type: 'TOGGLE_TODO', id });
+			}} />
+		)
+	}
+};
+//
+
 let nextTodoId = 0;											//index of the element in the todos list
 //class TodoApp extends React.Component {					//TodoApp doesn't need to be a class any more - it can be a function
-const TodoApp = ({todos, visibilityFilter}) => (
+const TodoApp = () => (
 //	render() {		//renders input field, button and the list of tasks (todos list; input ref has to be set that way); in the <li> we need to set the key value
 
 
 //		const visibleTodos = getVisibleTodos(todos, visibilityFilter);		//gets array of current visible 'todos' (depends on chosen filter)
 
 			<div>
-				<AddTodo onAddClick={ text => {
-				store.dispatch({ type: 'ADD_TODO', text, id: nextTodoId++ });
-			}} />
+				<AddTodo />
 
-				<TodoList todos={getVisibleTodos(todos, visibilityFilter)} onTodoClick={id => {
-					store.dispatch({ type: 'TOGGLE_TODO', id });
-				}} />
+				<VisibleTodoList />
 
 				<Footer />
 
 			</div>
 //	}
 );
-
-const render = () => {						//renders components on the page
-	ReactDOM.render(<TodoApp {...store.getState()}/>, document.getElementById('root'));	//giver all store agruments as a props
-};
 //
-store.subscribe(render);					//shows the components (calls the render function)
-render();
+//const render = () => {						//renders components on the page
+	ReactDOM.render(<TodoApp />, document.getElementById('root'));	//give all store agruments as a props
+//};
+//
+//store.subscribe(render);					//shows the components (calls the render function)
+//render();
