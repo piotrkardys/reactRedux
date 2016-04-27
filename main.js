@@ -727,7 +727,7 @@ ReactDOM.render(<Provider store={createStore(todoApp)}>
 				document.getElementById('root'));
 */
 
-/* LESSON 28 - */
+/* LESSON 28 - 30 */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
@@ -769,6 +769,31 @@ const todoApp = combineReducers({todos, visibilityFilter});
 
 
 
+let nextTodoId = 0;
+const addTodo = (text) => {							//it's better to make it (the body of the dispatch method) as a global function (every component has access to it)
+	return {
+		type: 'ADD_TODO',
+		id: nextTodoId++,
+		text 
+	};
+};
+
+const setVisibilityFilter = (filter) => {
+	return {
+		type: 'SET_VISIBILITY_FILTER', 
+		filter: filter
+	};
+};
+
+const toggleTodo = (id) => {
+	return {
+		type: 'TOGGLE_TODO', 
+		id
+	};
+};
+
+
+
 const Link = ({active, children, onClick}) => {
 	if (active) {								
 		return <span>{children}</span>	
@@ -794,7 +819,7 @@ const mapStateToLinkProps = (state, ownProps) => {		//the ownProps are props whi
 const mapDispatchToLinkProps = (dispatch, ownProps) => {
 	return {
 		onClick: () => { 
-			dispatch({ type: 'SET_VISIBILITY_FILTER', filter: ownProps.filter})
+			dispatch(setVisibilityFilter (ownProps.filter));
 		}
 	};
 };
@@ -817,7 +842,6 @@ const Footer = () => {
 //
 
 
-let nextTodoId = 0;
 let AddTodo = ({dispatch}) => { 		//we only need the dispatch method from the props object
 	let input;
 
@@ -826,7 +850,7 @@ let AddTodo = ({dispatch}) => { 		//we only need the dispatch method from the pr
 			<input ref={node => { input = node}} />
 
 			<button onClick={() => {
-				dispatch({ type: 'ADD_TODO', text: input.value, id: nextTodoId++ });
+				dispatch(addTodo(input.value));
 				input.value = '';
 			}}>
 				Add Todo
@@ -874,7 +898,7 @@ const mapStateToTodoListProps = (state) => {
 };
 const mapDispatchToTodoListProps = (dispatch) => {
 	return {
-		onTodoClick: (id) => { dispatch({ type: 'TOGGLE_TODO', id }) }
+		onTodoClick: (id) => { dispatch(toggleTodo(id)); }
 	};
 };
 const VisibleTodoList = connect(mapStateToTodoListProps, mapDispatchToTodoListProps)(TodoList);
