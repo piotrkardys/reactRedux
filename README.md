@@ -24,3 +24,4 @@
 "27.04.2016 – 13:00 – Lesson 28: changing AddTodo component (adding function connect), update file main.js" 
 "27.04.2016 – 13:30 – Lesson 29: dividing FilterLink into 3 functions linked with the connect function, update file main.js" 
 "27.04.2016 – 14:00 – Lesson 30: exporting the body of the dispatch method as a global function, update file main.js" 
+"27.04.2016 – 14:00 – end of the project" 
